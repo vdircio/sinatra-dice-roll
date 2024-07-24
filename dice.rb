@@ -14,12 +14,8 @@ BetterErrors::Middleware.allow_ip!('0.0.0.0/0.0.0.0')
 
 
 get '/' do      # when someone places a request for the path given, do something
-  "<h1>Dice Roll</h1>
-  <ul>
-    <li><a href=\"/dice/2/6\">Roll two die with 6 faces</a></li>
-    <li><a href=\"/dice/2/10\">Roll two die with 6 faces</a></li>
-  </ul>
-  " # the action - the last evaluated expression in here 
+  erb(:elephant)
+   # the action - the last evaluated expression in here 
 #is what Sinatra sends back as the body of out http response
 end
 # "/" is the root url
@@ -40,16 +36,29 @@ get("/dice/2/6") do
   rand2 = rand(6) + 1
   sum = rand1 + rand2
 
-  output = "you rolled a #{rand1} and a #{rand2} for a total of #{sum}"
-  "<h1>2d6</h1>
-  <p>#{output}</p>"
+  @output = "you rolled a #{rand1} and a #{rand2} for a total of #{sum}"
+  erb(:two_six)
 end
 
 get("/dice/2/10") do
   rand1 = rand(10) + 1
   rand2 = rand(10) + 1
   sum = rand1 + rand2
-  output = "you rolled a #{rand1} and a #{rand2} for a total of #{sum}"
-  "<h1>2d10</h1>
-  <p>#{output}</p>"
+  @output = "you rolled a #{rand1} and a #{rand2} for a total of #{sum}"
+  erb(:two_ten)
+end
+
+get("/dice/1/20") do
+  @die = rand(1..20)
+  @output = "You rolled a #{@die}"
+  erb(:one_twenty)
+end
+
+get("/dice/100/6") do
+  @rolls = []    # Create a blank array
+  100.times do    # 100 times...
+    die = rand(1..6)    # Generate a random number
+    @rolls.push(die)    # Add the random number to the array 
+  end
+  erb(:one_hundred_six)
 end
